@@ -3,6 +3,7 @@ package org.example.project
 
 import MovieSDK
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -17,11 +18,15 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -42,7 +47,10 @@ import network.model.Article
 import network.model.NewsResponse
 
 @Composable
-fun HomeScreen(component: HomeScreenComponent) {
+fun HomeScreen(component: HomeScreenComponent,
+               onBackClick: () -> Unit,
+               onEvent: (HomeScreenEvent) -> Unit,
+               ) {
     val movieSDK: MovieSDK = MovieSDK()
     var newsResponse1 by remember { mutableStateOf(NewsResponse()) }
 
@@ -65,12 +73,23 @@ fun HomeScreen(component: HomeScreenComponent) {
 
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colors.primary
+        color = Color(0xFF005DAC)
     ) {
         Scaffold(
             topBar = {
-                TopAppBar(backgroundColor = Color.Blue) {
-                    Row {
+                TopAppBar(backgroundColor = Color(0xFF005DAC)) {
+                    Row (
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ){
+                        IconButton(onClick = { onBackClick() }) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                                contentDescription = "Search",
+                                tint = Color.White,
+                                modifier = Modifier.size(25.dp)
+                            )
+                        }
                         Text(
                             text = "News App",
                             color = Color.White,
@@ -126,13 +145,13 @@ fun ArticleCard(
 ) {
 
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(8.dp)
             .clip(RoundedCornerShape(16.dp))
             .clickable(onClick = onClick),
         elevation = 0.dp,
-        backgroundColor = Color.Blue
+        backgroundColor = Color(0xFF005DAC)
     ) {
         Row(
             modifier = Modifier

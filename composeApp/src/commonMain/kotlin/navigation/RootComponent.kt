@@ -34,11 +34,13 @@ class RootComponent(
                     onNavigateToDetailScreen = { article ->
                         println("News item clicked ${article.title}")
                         navigation.pushNew(Configuration.NewsDetailScreen(article))
-                    })
+                    },
+                    navigation = navigation
+                    )
             )
 
             is Configuration.NewsDetailScreen -> Child.NewsDetailScreen(
-                NewsDetailScreenComponentt(config.article, context)
+                NewsDetailScreenComponentt(config.article, navigation,context)
             )
         }
     }

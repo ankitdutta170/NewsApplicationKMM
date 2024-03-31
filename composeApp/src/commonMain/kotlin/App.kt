@@ -16,6 +16,8 @@ import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.value.getValue
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import navigation.HomeScreenEvent
+import navigation.NewsDetailsUiEvent
 import navigation.RootComponent
 import network.model.NewsResponse
 import org.jetbrains.compose.resources.ExperimentalResourceApi
@@ -40,10 +42,19 @@ fun App(rootComponent: RootComponent) {
         Children(
             stack = childStack,
             animation = stackAnimation(slide())
-        ){child ->
-            when(val instance = child.instance){
-                is RootComponent.Child.HomeScreen -> HomeScreen(instance.component)
-                is RootComponent.Child.NewsDetailScreen -> NewsDetailScreen(instance.component.article,instance.component)
+        ) { child ->
+            when (val instance = child.instance) {
+                is RootComponent.Child.HomeScreen -> HomeScreen(
+                    component = instance.component,
+                    onBackClick = { instance.component.onEvent(HomeScreenEvent.OnBackClicked) },
+                    onEvent = { instance.component.onEvent(it) }
+                )
+
+                is RootComponent.Child.NewsDetailScreen -> NewsDetailScreen(
+                    article = instance.component.article,
+                    onBackClick = {instance.component.onEvent(NewsDetailsUiEvent.OnBackClicked)},
+                    component = instance.component
+                )
             }
 
         }
